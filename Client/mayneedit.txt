@@ -1,0 +1,7 @@
+INSIDE SCRIPT:
+
+"predeploy": "npm run build",
+"deploy": "gh-pages -d build",
+
+ABOVE NAME:
+"homepage": "https://JARViSmakesitEZ.github.io/BankApp_React",

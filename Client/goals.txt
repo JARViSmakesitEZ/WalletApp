@@ -1,0 +1,4 @@
+:: user logs in
+:: user data is fetched from the server
+:: data is sent to homepage.jsx
+:: 

@@ -1,8 +1,4 @@
 import React from "react";
-// import TransferCard from "./TransferCard";
-// import LoanCard from "./LoanCard";
-// import CloseCard from "./CloseCard";
-// import Card from "./Card";
 
 function Functionalities() {
   const [btnState, setBtnState] = React.useState("");

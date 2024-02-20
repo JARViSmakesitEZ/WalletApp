@@ -33,19 +33,13 @@ function HomePage() {
       <Navbar text={`Welcome back ${userData.username} .`} />
       <Balance />
       <ShowTransactions />
-      <Functionalities
-        userData={userData}
-        setMovements={setMovements}
-        movements={movements}
-      />
+      <Functionalities userData={userData} />
       {/* <Card /> */}
-      <Movement movements={movements} setMovements={setMovements} />
-      <Summary movements={movements} />
+      <Movement />
+      <Summary />
 
       <LoanRequest
         setLoanRequests={setLoanRequests}
-        setMovements={setMovements}
-        movements={movements}
         userData={userData}
         loanRequests={loanRequests}
       />

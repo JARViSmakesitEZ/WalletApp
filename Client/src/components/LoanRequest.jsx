@@ -3,8 +3,9 @@ import axios from "axios";
 import OperationStatus from "./OperationStatus";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { balanceState } from "../recoil/user/balanceState";
+import { movementState } from "../recoil/user/movementState";
 
-function ShowLoanRequest(props, userData, propSec, setBalance) {
+function ShowLoanRequest(props, userData, propSec, setBalance, setMovements) {
   const [response, setResponse] = React.useState("");
 
   async function processResponse(e) {
@@ -52,7 +53,7 @@ function ShowLoanRequest(props, userData, propSec, setBalance) {
       const movements = json.transactions.transactions;
 
       propSec.setLoanRequests(updatedLoanRequests);
-      propSec.setMovements(movements);
+      setMovements(movements);
       setBalance(balance);
       propSec.setOperationState(
         <OperationStatus
@@ -98,6 +99,7 @@ function LoanRequest(props) {
   const userData = props.userData;
   const requests = props.loanRequests;
   const setBalance = useSetRecoilState(balanceState);
+  const setMovements = useSetRecoilState(movementState);
 
   return (
     <div className="loan-requests-container">
@@ -111,7 +113,8 @@ function LoanRequest(props) {
               { ...data, index: index },
               userData,
               props,
-              setBalance
+              setBalance,
+              setMovements
             )
           )}
         </div>

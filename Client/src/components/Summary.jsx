@@ -1,10 +1,12 @@
 import React from "react";
+import { useRecoilValue } from "recoil";
+import { movementState } from "../recoil/user/movementState";
 
 function Summary(props) {
   let inAmount = 0;
   let outAmount = 0;
   let interest = 0;
-  const data = props.movements;
+  const data = useRecoilValue(movementState);
   for (let i = 0; i < data.length; i++) {
     if (data[i].type === "deposit") {
       inAmount += data[i].amount;

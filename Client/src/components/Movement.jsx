@@ -1,4 +1,6 @@
 import React from "react";
+import { useRecoilValue } from "recoil";
+import { movementState } from "../recoil/user/movementState";
 
 function showMovements(data) {
   return (
@@ -31,7 +33,7 @@ function showMovements(data) {
 }
 
 function Movement(props) {
-  const movements = props.movements;
+  const movements = useRecoilValue(movementState);
   return (
     <div className="movements homePage__animation">
       <p className={movements.length > 0 ? "hide" : "no_transactions"}>

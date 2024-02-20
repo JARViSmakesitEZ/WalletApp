@@ -1,4 +1,6 @@
 import React from "react";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { balanceState } from "../recoil/user/balanceState";
 
 const date = new Date();
 const day = date.getDate();
@@ -6,7 +8,7 @@ const month = date.getMonth() + 1;
 const year = date.getFullYear();
 
 function Balance(props) {
-  const [balance, setBalance] = React.useState(props.balanceValue);
+  const [balance, setBalance] = useRecoilState(balanceState);
   return (
     <div class="balance homePage__animation">
       <div class="date-label">
@@ -18,7 +20,7 @@ function Balance(props) {
           </span>
         </p>
       </div>
-      <p class="balance__value">₹ {props.balanceValue}</p>
+      <p class="balance__value">₹ {balance}</p>
     </div>
   );
 }

@@ -6,16 +6,19 @@ import Signup2 from "./Signup2";
 import HomePage from "./HomePage";
 import LoginPopup from "./LoginPopup";
 import TestHomePage from "./TestHomePage";
+import { RecoilRoot } from "recoil";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/login" element={<Login2 />} />
-      <Route path="/signup" element={<Signup2 />} />
-      <Route path="/home" element={<TestHomePage />} />
-      <Route path="/loginpopup" element={<LoginPopup />} />
-    </Routes>
+    <RecoilRoot>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login2 />} />
+        <Route path="/signup" element={<Signup2 />} />
+        <Route path="/home" element={<TestHomePage />} />
+        <Route path="/loginpopup" element={<LoginPopup />} />
+      </Routes>
+    </RecoilRoot>
   );
 }
 

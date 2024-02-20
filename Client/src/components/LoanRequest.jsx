@@ -1,8 +1,10 @@
 import React from "react";
 import axios from "axios";
 import OperationStatus from "./OperationStatus";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { balanceState } from "../recoil/user/balanceState";
 
-function ShowLoanRequest(props, userData, propSec) {
+function ShowLoanRequest(props, userData, propSec, setBalance) {
   const [response, setResponse] = React.useState("");
 
   async function processResponse(e) {
@@ -51,7 +53,7 @@ function ShowLoanRequest(props, userData, propSec) {
 
       propSec.setLoanRequests(updatedLoanRequests);
       propSec.setMovements(movements);
-      propSec.setBalance(balance);
+      setBalance(balance);
       propSec.setOperationState(
         <OperationStatus
           setOperationState={props.setOperationState}
@@ -92,45 +94,10 @@ function ShowLoanRequest(props, userData, propSec) {
   );
 }
 
-// function showLoanRequest(props) {
-//   async function processResponse(e, index) {
-//     console.log(index);
-//     // try {
-//     //   const loanRequestStatus = await axios.post(
-//     //     "http://localhost:5001/api/endpoint/processloan",
-//     //     // { username, amount, sender }
-//     //   );
-//     //   setAmount(0);
-//     //   setUsername("");
-//     // } catch (error) {
-//     //   // Handle any errors that occurred during the request
-//     //   console.error("Error:", error);
-//     // }
-//   }
-//   return (
-//     <div className="loan-request">
-//       <p>
-//         {props.username} has requested ₹ {props.amount} from you .
-//       </p>
-//       <button
-//         className="approve-btn"
-//         onClick={(e, index) => processResponse(e, index)}
-//       >
-//         Approve
-//       </button>
-//       <button
-//         className="reject-btn"
-//         onClick={(e, index) => processResponse(e, index)}
-//       >
-//         Reject
-//       </button>
-//     </div>
-//   );
-// }
-
 function LoanRequest(props) {
   const userData = props.userData;
   const requests = props.loanRequests;
+  const setBalance = useSetRecoilState(balanceState);
 
   return (
     <div className="loan-requests-container">
@@ -140,7 +107,12 @@ function LoanRequest(props) {
       {requests ? (
         <div>
           {requests.map((data, index) =>
-            ShowLoanRequest({ ...data, index: index }, userData, props)
+            ShowLoanRequest(
+              { ...data, index: index },
+              userData,
+              props,
+              setBalance
+            )
           )}
         </div>
       ) : (

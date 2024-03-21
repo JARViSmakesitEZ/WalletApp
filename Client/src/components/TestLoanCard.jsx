@@ -25,10 +25,19 @@ function LoanCard(props) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, amount, sender }),
+        body: JSON.stringify({
+          username,
+          amount,
+          sender,
+          token: document.cookie,
+        }),
       });
 
       const responseJson = await response.json();
+      if (responseJson.message === "Unauthorized") {
+        alert("Session timeout, please login/signup");
+        window.location.href = "/";
+      }
       setRequestStatus(
         <LoanRequestStatus
           setRequestStatus={setRequestStatus}

@@ -14,7 +14,7 @@ html {
   font-size: 62.5%;
   box-sizing: border-box;
   height: 100%;
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 
 body {
@@ -216,7 +216,7 @@ button {
 .signup-container {
   display: flex;
   flex-direction: column;
-  height: 564px;
+  height: 540px;
   width: 400px;
   background-color: #952323;
   gap: 20px;
@@ -227,7 +227,7 @@ button {
   margin-right: 110px;
   text-align: center;
   position: relative;
-  top: 50px;
+  top: 30px;
   left: 555px;
   font-weight: 550;
   /* background-image: linear-gradient(to top, #dad4b5, #952323); */

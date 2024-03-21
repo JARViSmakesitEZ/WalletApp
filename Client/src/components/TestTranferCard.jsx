@@ -2,6 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import OperationStatus from "./OperationStatus";
+import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
+import { balanceState } from "../recoil/user/balanceState";
+import { movementState } from "../recoil/user/movementState";
 
 function TestTransferCard(props) {
   const Navigate = useNavigate();
@@ -9,6 +12,8 @@ function TestTransferCard(props) {
     reciever: "",
     amount: 0,
   });
+  const setBalance = useSetRecoilState(balanceState);
+  const [movements, setMovements] = useRecoilState(movementState);
   async function handleSubmit(e) {
     e.preventDefault();
     props.setCardState("cle");
@@ -20,17 +25,25 @@ function TestTransferCard(props) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...formData, sender: props.userData.username }),
+        body: JSON.stringify({
+          ...formData,
+          sender: props.userData.username,
+          token: document.cookie,
+        }),
       }
     );
     const responseJson = await response.json();
     console.log(responseJson);
+    if (responseJson.message === "Unauthorized") {
+      alert("Session timeout, please login/signup");
+      window.location.href = "/";
+    }
     if (responseJson.status) {
       console.log(11111);
-      console.log(props.movements);
-      props.setBalance(responseJson.balance);
-      props.setMovements([
-        ...props.movements,
+      console.log(movements);
+      setBalance(responseJson.balance);
+      setMovements([
+        ...movements,
         {
           recieverID: responseJson.reciever,
           amount: responseJson.amount,

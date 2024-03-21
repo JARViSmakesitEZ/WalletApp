@@ -21,13 +21,19 @@ function LoginForm2(props) {
             "Content-Type": "application/json",
             // add any additional headers if needed
           },
-          body: JSON.stringify({ formData }),
+          body: JSON.stringify({ ...formData }),
         }
       );
       // Handle the response from the server here
       const json = await loginStatus.json();
       const userData = json.user;
       const status = json.status;
+      const token = json.token;
+      document.cookie = token;
+      document.username = userData["username"];
+      document.password = userData["password"];
+      console.log("token:");
+      console.log(document.cookie);
 
       if (status) {
         Navigate("/home", { state: userData });

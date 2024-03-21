@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { User, Movement } = require("../db");
+const jwt = require("jsonwebtoken");
+const secretKey = "jarvis787";
 
 router.post("/", async (req, res) => {
   console.log("request recieved");

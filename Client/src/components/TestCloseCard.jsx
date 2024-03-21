@@ -10,7 +10,11 @@ function CloseCard(props) {
   const Navigate = useNavigate();
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+      token: document.cookie,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -21,6 +25,10 @@ function CloseCard(props) {
         "http://localhost:5001/api/endpoint/close",
         { ...formData }
       );
+      if (closeAccountStatus.message === "Unauthorized") {
+        alert("Session timeout, please login/signup");
+        window.location.href = "/";
+      }
 
       // Handle the response from the server here
       // const closeAccountData = closeAccountStatus.data;

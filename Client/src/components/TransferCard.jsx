@@ -15,7 +15,7 @@ function TransferCard(props) {
     try {
       const transferStatus = await axios.post(
         "http://localhost:5001/api/endpoint/transfer",
-        { ...formData, sender: props.userData.username }
+        { ...formData, sender: props.userData.username, token: document.cookie }
       );
 
       // Handle the response from the server here

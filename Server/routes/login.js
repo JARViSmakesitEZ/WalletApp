@@ -1,18 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const { User, Movement } = require("../db");
+const jwt = require("jsonwebtoken");
+const secretKey = "jarvis787";
 
 router.post("/", async (req, res) => {
   console.log("Hi i just got hit");
   try {
-    const formData = req.body;
-    const userData = formData.formData;
+    const userData = req.body;
 
     // Make sure the 'validateUser' function populates the 'transactions' field.
     const data = await validateUser(userData);
+    // Generate JWT token
+    const token = jwt.sign(userData, secretKey, { expiresIn: 30 }); // Expires in 30 seconds
+    // Token expires
+    console.log(token);
 
     if (data.status) {
-      res.status(200).json({ user: data.user, status: true });
+      res.status(200).json({ user: data.user, status: true, token: token });
     } else {
       res.status(404).json({ msg: "User not found.", status: false });
     }

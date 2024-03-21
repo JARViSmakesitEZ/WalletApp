@@ -8,12 +8,11 @@ const month = date.getMonth() + 1;
 const year = date.getFullYear();
 
 router.post("/", async (req, res) => {
-  // console.log(data);
   const data = req.body;
-  // console.log(data);
+  console.log("data:");
+  console.log(data);
 
   const updatedRequests = await processLoanRequest(data);
-  // console.log(1245);
   res.send({ ...updatedRequests, success: true });
 });
 
@@ -21,19 +20,18 @@ async function processLoanRequest(data) {
   const senderUsername = data.username;
   const receiverUsername = data.sender;
   const amount = parseFloat(data.amount);
-  // console.log("my data:", data);
   const response = data.response;
   const requestID = data.requestID;
 
   try {
     const sender = await User.findOne({ username: senderUsername });
     const receiver = await User.findOne({ username: receiverUsername });
-    // console.log("this is my response:" + response);
+    let transactions;
 
     if (response === "approve") {
       await processDeposit({ username: receiverUsername, amount: amount });
       await processWithdraw({ username: senderUsername, amount: amount });
-      updateTransactionHistory(data);
+      transactions = await updateTransactionHistory(data);
     }
 
     const loanRequests = sender.loanRequests;
@@ -62,6 +60,7 @@ async function processLoanRequest(data) {
       balance,
       movements: trans,
       status: true,
+      transactions: transactions,
       msg: "successful",
     };
   } catch (error) {
@@ -74,7 +73,6 @@ async function processWithdraw(data) {
   try {
     const user = await User.findOne({ username: data.username });
     const updatedBalance = parseFloat(user.balance) - parseFloat(data.amount);
-    // console.log(user.username + " updatedBalance:" + updatedBalance);
 
     // Update the user's balance in the database
     await User.findOneAndUpdate(
@@ -161,6 +159,7 @@ async function updateTransactionHistory(data) {
       { transactions: recieverTransactions },
       { new: true }
     );
+    return senderTransactions;
     // res.json({ message: "Balance updated successfully" });
   } catch (error) {
     console.error("Error:", error);

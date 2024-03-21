@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Balance from "./Balance";
 import Movement from "./Movement";
 import Summary from "./Summary";
@@ -18,37 +18,31 @@ import {
 } from "recoil";
 import { balanceState } from "../recoil/user/balanceState";
 import { movementState } from "../recoil/user/movementState";
+import { loanRequestsState } from "../recoil/user/loanRequestsState";
 
 function HomePage() {
   const location = useLocation();
   const [userData, setUserData] = useState(location.state);
   const [balance, setBalance] = useRecoilState(balanceState);
-  setBalance(userData.balance);
   const [movements, setMovements] = useRecoilState(movementState);
-  setMovements(userData.transactions);
-  const [loanRequests, setLoanRequests] = useState(userData.loanRequests);
+  const [loanRequests, setLoanRequests] = useRecoilState(loanRequestsState);
+  console.log("userdata:");
+  console.log(userData);
+  useEffect(() => {
+    setMovements(userData.transactions);
+    setBalance(userData.balance);
+    setLoanRequests(userData.loanRequests);
+  }, []);
 
   return (
     <div>
       <Navbar text={`Welcome back ${userData.username} .`} />
       <Balance />
       <ShowTransactions />
-      <Functionalities
-        userData={userData}
-        setMovements={setMovements}
-        movements={movements}
-      />
-      {/* <Card /> */}
-      <Movement movements={movements} setMovements={setMovements} />
-      <Summary movements={movements} />
-
-      <LoanRequest
-        setLoanRequests={setLoanRequests}
-        setMovements={setMovements}
-        movements={movements}
-        userData={userData}
-        loanRequests={loanRequests}
-      />
+      <Functionalities userData={userData} />
+      <Movement />
+      <Summary />
+      <LoanRequest userData={userData} />
     </div>
   );
 }

@@ -1,17 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import OperationStatus from "./OperationStatus";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { balanceState } from "../recoil/user/balanceState";
-
-function ShowLoanRequest(props, userData, propSec, setBalance) {
+import { movementState } from "../recoil/user/movementState";
+import { loanRequestsState } from "../recoil/user/loanRequestsState";
+function ShowLoanRequest({
+  data,
+  index,
+  userData,
+  loanRequests,
+  setLoanRequests,
+  setBalance,
+  setMovements,
+  setOperationState,
+}) {
   const [response, setResponse] = React.useState("");
+  console.log(1345);
 
   async function processResponse(e) {
-    const sender = props.username;
-    const requestID = props.index;
-    const amount = props.amount;
+    const sender = data.username;
+    const requestID = index;
+    const amount = data.amount;
     const response = e;
+    console.log(document.cookie);
+
     try {
       const res = await fetch(
         "http://localhost:5001/api/endpoint/processloan",
@@ -26,6 +39,7 @@ function ShowLoanRequest(props, userData, propSec, setBalance) {
             sender,
             requestID,
             response,
+            token: document.cookie,
           }),
         }
       );
@@ -44,19 +58,22 @@ function ShowLoanRequest(props, userData, propSec, setBalance) {
           },
           body: JSON.stringify({
             username: userData.username,
+            token: document.cookie,
           }),
         }
       );
 
       const json = await res2.json();
       const movements = json.transactions.transactions;
+      console.log("json:");
+      console.log(json);
 
-      propSec.setLoanRequests(updatedLoanRequests);
-      propSec.setMovements(movements);
+      setLoanRequests(updatedLoanRequests);
+      setMovements(movements);
       setBalance(balance);
-      propSec.setOperationState(
+      setOperationState(
         <OperationStatus
-          setOperationState={props.setOperationState}
+          setOperationState={setOperationState}
           success={status.success}
           msg={status.msg}
         />
@@ -70,7 +87,7 @@ function ShowLoanRequest(props, userData, propSec, setBalance) {
   return (
     <div className="movements__row">
       <p className="loanreq--msg">
-        {props.username} requested ₹ {props.amount}.
+        {data.username} requested ₹ {data.amount}.
       </p>
       <button
         className="approve-btn"
@@ -94,30 +111,29 @@ function ShowLoanRequest(props, userData, propSec, setBalance) {
   );
 }
 
-function LoanRequest(props) {
-  const userData = props.userData;
-  const requests = props.loanRequests;
+function LoanRequest({ userData }) {
   const setBalance = useSetRecoilState(balanceState);
+  const setMovements = useSetRecoilState(movementState);
+  const [loanRequests, setLoanRequests] = useRecoilState(loanRequestsState);
+  const [operationState, setOperationState] = useState("");
 
   return (
     <div className="loan-requests-container">
-      <p className={requests.length > 0 ? "hide" : "no_requests"}>
-        No Loan Requests .
+      <p className={loanRequests.length > 0 ? "hide" : "no_requests"}>
+        No Loan Requests.
       </p>
-      {requests ? (
-        <div>
-          {requests.map((data, index) =>
-            ShowLoanRequest(
-              { ...data, index: index },
-              userData,
-              props,
-              setBalance
-            )
-          )}
-        </div>
-      ) : (
-        <div></div>
-      )}
+      {loanRequests.map((data, index) => (
+        <ShowLoanRequest
+          data={data}
+          index={index}
+          userData={userData}
+          loanRequests={loanRequests}
+          setLoanRequests={setLoanRequests}
+          setBalance={setBalance}
+          setMovements={setMovements}
+          setOperationState={setOperationState}
+        />
+      ))}
     </div>
   );
 }

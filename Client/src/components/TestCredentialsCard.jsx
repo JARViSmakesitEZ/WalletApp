@@ -21,12 +21,16 @@ function CredentialsCard(props) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({ ...formData, token: document.cookie }),
         }
       );
 
       // Handle the response from the server here
       const data = await response.json();
+      if (data.message === "Unauthorized") {
+        alert("Session timeout, please login/signup");
+        window.location.href = "/";
+      }
       console.log(data);
       if (data.status) {
         // Assuming a successful response contains a "success" property

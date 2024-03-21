@@ -40,9 +40,21 @@ function HomePage() {
       <Balance />
       <ShowTransactions />
       <Functionalities userData={userData} />
+<<<<<<< HEAD
       <Movement />
       <Summary />
       <LoanRequest userData={userData} />
+=======
+      {/* <Card /> */}
+      <Movement />
+      <Summary />
+
+      <LoanRequest
+        setLoanRequests={setLoanRequests}
+        userData={userData}
+        loanRequests={loanRequests}
+      />
+>>>>>>> 5a73cfcab540388769088a50f5b450490776065a
     </div>
   );
 }

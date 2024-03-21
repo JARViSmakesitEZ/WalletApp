@@ -26,16 +26,16 @@ function LoginForm2(props) {
       );
       // Handle the response from the server here
       const json = await loginStatus.json();
-      const userData = json.user;
       const status = json.status;
-      const token = json.token;
-      document.cookie = token;
-      document.username = userData["username"];
-      document.password = userData["password"];
-      console.log("token:");
-      console.log(document.cookie);
 
       if (status) {
+        const userData = json.user;
+        const token = json.token;
+        document.cookie = token;
+        document.username = userData["username"];
+        document.password = userData["password"];
+        console.log("token:");
+        console.log(document.cookie);
         Navigate("/home", { state: userData });
       } else {
         // Handle the case when login was unsuccessful

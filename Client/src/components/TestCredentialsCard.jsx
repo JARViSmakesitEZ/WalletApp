@@ -12,7 +12,7 @@ function CredentialsCard(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(userData.id!==id){
+    if(userData.id!==parseInt(id)){
       alert("wrong user ID.");
       return;
     }

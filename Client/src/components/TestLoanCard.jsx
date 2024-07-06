@@ -18,6 +18,7 @@ function LoanCard(props) {
   }
   async function sendLoanRequest(e) {
     e.preventDefault();
+
     if (isNaN(userId) || isNaN(senderId) || isNaN(amount)) {
       setRequestStatus(
         <LoanRequestStatus
@@ -29,9 +30,20 @@ function LoanCard(props) {
 
       return;
     }
+
+    if (senderId === userId) {
+      setRequestStatus(
+        <LoanRequestStatus
+          setRequestStatus={setRequestStatus}
+          success={false}
+          msg="Not Allowed."
+        />
+      );
+      return;
+    }
     try {
       const response = await fetch(
-        "https://springbootbackend-production-4c75.up.railway.app/loan/send",
+        "https://springbootbackend-production-4c75.up.railway.app/user/loan/send",
         {
           method: "POST",
           headers: {

@@ -68,7 +68,7 @@ function CredentialsCard(props) {
             value={password}
           />
           <button className="form__btn form__btn--transfer">&rarr;</button>
-          <label className="form__label">username</label>
+          <label className="form__label">user ID</label>
           <label className="form__label">PIN</label>
         </form>
       </div>

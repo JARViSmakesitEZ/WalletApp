@@ -31,7 +31,7 @@ function LoanCard(props) {
     }
     try {
       const response = await fetch(
-        "https://springbootbackend-production-4c75.up.railway.app/user/loan/send",
+        "https://springbootbackend-production-4c75.up.railway.app/loan/send",
         {
           method: "POST",
           headers: {

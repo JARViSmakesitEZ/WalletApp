@@ -30,17 +30,20 @@ function LoanCard(props) {
       return;
     }
     try {
-      const response = await fetch("http://localhost:9090/loan/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          senderId,
-          amount: parseInt(amount),
-          userId,
-        }),
-      });
+      const response = await fetch(
+        "https://springbootbackend-production-4c75.up.railway.app/user/loan/send",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            senderId,
+            amount: parseInt(amount),
+            userId,
+          }),
+        }
+      );
 
       const responseJson = await response.json();
       console.log(responseJson);

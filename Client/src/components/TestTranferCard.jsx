@@ -18,6 +18,16 @@ function TestTransferCard(props) {
   async function handleSubmit(e) {
     e.preventDefault();
     props.setCardState("cle"); // Assuming "cle" is a state setter function
+    if (formData.receiverID === props.userData.id) {
+      props.setOperationState(
+        <OperationStatus
+          setOperationState={props.setOperationState}
+          success={false}
+          msg="Not Allowed."
+        />
+      );
+      return;
+    }
 
     try {
       const response = await axios.post(

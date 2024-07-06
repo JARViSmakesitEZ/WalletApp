@@ -12,6 +12,10 @@ function CredentialsCard(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(userData.id!==id){
+      alert("wrong user ID.");
+      return;
+    }
 
     try {
       const response = await fetch(

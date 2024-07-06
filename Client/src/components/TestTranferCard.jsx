@@ -7,60 +7,57 @@ import { balanceState } from "../recoil/user/balanceState";
 import { movementState } from "../recoil/user/movementState";
 
 function TestTransferCard(props) {
+  console.log(props);
   const Navigate = useNavigate();
   const [formData, setFormData] = useState({
-    reciever: "",
+    receiverID: "",
     amount: 0,
   });
   const setBalance = useSetRecoilState(balanceState);
   const [movements, setMovements] = useRecoilState(movementState);
   async function handleSubmit(e) {
     e.preventDefault();
-    props.setCardState("cle");
-    console.log("we good");
-    const response = await fetch(
-      "http://localhost:5001/api/endpoint/transfer",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          sender: props.userData.username,
-          token: document.cookie,
-        }),
-      }
-    );
-    const responseJson = await response.json();
-    console.log(responseJson);
-    if (responseJson.message === "Unauthorized") {
-      alert("Session timeout, please login/signup");
-      window.location.href = "/";
-    }
-    if (responseJson.status) {
-      console.log(11111);
-      console.log(movements);
-      setBalance(responseJson.balance);
-      setMovements([
-        ...movements,
+    props.setCardState("cle"); // Assuming "cle" is a state setter function
+
+    try {
+      const response = await axios.post(
+        "https://springbootbackend-production-4c75.up.railway.app/transaction",
         {
-          recieverID: responseJson.reciever,
-          amount: responseJson.amount,
-          type: "withdrawal",
-          date: responseJson.date,
-          id: responseJson.id,
+          ...formData,
+          senderID: props.userData.id,
         },
-      ]);
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("these are the response");
+      console.log(response);
+
+      // Check if the response indicates success
+      if (response.data.status) {
+        // Update UI state based on successful response
+        setBalance(response.data.user.balance);
+        setMovements(response.data.user.movements);
+      }
+
+      // Update operation state based on response
+      props.setOperationState(
+        <OperationStatus
+          setOperationState={props.setOperationState}
+          success={response.data.status}
+          msg={response.data.message}
+        />
+      );
+    } catch (error) {
+      // Log error for debugging
+      console.log("Axios error:", error);
+      // Handle error states or display error message as needed
     }
-    props.setOperationState(
-      <OperationStatus
-        setOperationState={props.setOperationState}
-        success={responseJson.status}
-        msg={responseJson.msg}
-      />
-    );
   }
+
   return (
     <div className="modal-overlay">
       <div className="operation operation--transfer card hidden">
@@ -71,7 +68,7 @@ function TestTransferCard(props) {
             className="form__input form__input--to"
             name="reciever"
             onChange={(e) =>
-              setFormData({ ...formData, reciever: e.target.value })
+              setFormData({ ...formData, receiverID: e.target.value })
             }
           />
           <input

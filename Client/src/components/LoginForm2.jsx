@@ -14,7 +14,7 @@ function LoginForm2(props) {
 
     try {
       const loginStatus = await fetch(
-        "http://localhost:5001/api/endpoint/login",
+        "https://springbootbackend-production-4c75.up.railway.app/user/login",
         {
           method: "POST",
           headers: {
@@ -43,7 +43,7 @@ function LoginForm2(props) {
           <LoginOperationStatus
             setOperationState={setOperationState}
             btnText="try again"
-            msg={json.msg}
+            msg={json.message}
           />
         );
       }
@@ -80,7 +80,7 @@ function LoginForm2(props) {
         <input
           type="password"
           placeholder="PIN"
-          maxlength="4"
+          maxlength="7"
           class="login__input login__input--pin change__colors"
           name="password"
           id="password"

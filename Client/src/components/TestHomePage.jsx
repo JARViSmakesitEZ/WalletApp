@@ -22,16 +22,18 @@ import { loanRequestsState } from "../recoil/user/loanRequestsState";
 
 function HomePage() {
   const location = useLocation();
+  console.log(location);
   const [userData, setUserData] = useState(location.state);
   const [balance, setBalance] = useRecoilState(balanceState);
   const [movements, setMovements] = useRecoilState(movementState);
   const [loanRequests, setLoanRequests] = useRecoilState(loanRequestsState);
   console.log("userdata:");
   console.log(userData);
+
   useEffect(() => {
-    setMovements(userData.transactions);
+    if (userData.movements != null) setMovements(userData.movements);
     setBalance(userData.balance);
-    setLoanRequests(userData.loanRequests);
+    if (userData.loanRequests != null) setLoanRequests(userData.loanRequests);
   }, []);
 
   return (
@@ -40,21 +42,9 @@ function HomePage() {
       <Balance />
       <ShowTransactions />
       <Functionalities userData={userData} />
-<<<<<<< HEAD
       <Movement />
       <Summary />
       <LoanRequest userData={userData} />
-=======
-      {/* <Card /> */}
-      <Movement />
-      <Summary />
-
-      <LoanRequest
-        setLoanRequests={setLoanRequests}
-        userData={userData}
-        loanRequests={loanRequests}
-      />
->>>>>>> 5a73cfcab540388769088a50f5b450490776065a
     </div>
   );
 }

@@ -1,44 +1,41 @@
 import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function CredentialsCard(props) {
-  console.log(props.username);
+  const userData = props.userData;
+  console.log(userData);
   const Navigate = useNavigate();
-  const [formData, setFormData] = React.useState({ username: props.username });
-  console.log(formData);
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
-    console.log(formData);
     e.preventDefault();
 
     try {
-      console.log(formData);
       const response = await fetch(
-        "http://localhost:5001/api/endpoint/changecredentials",
+        "https://springbootbackend-production-4c75.up.railway.app/user/" +
+          parseInt(id),
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ...formData, token: document.cookie }),
+          body: JSON.stringify({ password }),
         }
       );
 
       // Handle the response from the server here
       const data = await response.json();
-      if (data.message === "Unauthorized") {
-        alert("Session timeout, please login/signup");
-        window.location.href = "/";
-      }
-      console.log(data);
+
       if (data.status) {
         // Assuming a successful response contains a "success" property
         console.log("successful");
         // Navigate to the home page or handle the navigation as needed
         Navigate("/");
       } else {
-        console.log("failed");
+        alert("failed");
       }
     } catch (error) {
       // Handle any errors that occurred during the request
@@ -47,7 +44,8 @@ function CredentialsCard(props) {
   };
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "id") setId(e.target.value);
+    else setPassword(e.target.value);
   };
 
   return (
@@ -56,18 +54,18 @@ function CredentialsCard(props) {
         <h2>Change Credentials</h2>
         <form className="form form--transfer" onSubmit={handleSubmit}>
           <input
-            type="text"
+            type="num"
             className="form__input form__input--to"
             onChange={handleInputChange}
-            name="newusername"
-            value={formData.newusername}
+            name="id"
+            value={id}
           />
           <input
-            type="number"
+            type="text"
             className="form__input form__input--amount"
             onChange={handleInputChange}
             name="password"
-            value={formData.password}
+            value={password}
           />
           <button className="form__btn form__btn--transfer">&rarr;</button>
           <label className="form__label">username</label>

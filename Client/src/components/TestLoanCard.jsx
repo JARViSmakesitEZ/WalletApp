@@ -6,38 +6,44 @@ import LoanRequestStatus from "./LoanRequestStatus";
 function LoanCard(props) {
   const Navigate = useNavigate();
   const [amount, setAmount] = React.useState(0);
-  const [username, setUsername] = React.useState("");
+  const [userId, setUserId] = React.useState(-1);
   const [requestStatus, setRequestStatus] = React.useState("");
-  const sender = props.userData.username;
+  const senderId = props.userData.id;
 
   function updateAmount(e) {
     setAmount(e.target.value);
   }
-  function updateUsername(e) {
-    setUsername(e.target.value);
+  function updateUserId(e) {
+    setUserId(e.target.value);
   }
   async function sendLoanRequest(e) {
     e.preventDefault();
+    if (isNaN(userId) || isNaN(senderId) || isNaN(amount)) {
+      setRequestStatus(
+        <LoanRequestStatus
+          setRequestStatus={setRequestStatus}
+          success={false}
+          msg="Invalid details. userId, senderId, and amount must be numbers."
+        />
+      );
 
+      return;
+    }
     try {
-      const response = await fetch("http://localhost:5001/api/endpoint/loan", {
+      const response = await fetch("http://localhost:9090/loan/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username,
-          amount,
-          sender,
-          token: document.cookie,
+          senderId,
+          amount: parseInt(amount),
+          userId,
         }),
       });
 
       const responseJson = await response.json();
-      if (responseJson.message === "Unauthorized") {
-        alert("Session timeout, please login/signup");
-        window.location.href = "/";
-      }
+      console.log(responseJson);
       setRequestStatus(
         <LoanRequestStatus
           setRequestStatus={setRequestStatus}
@@ -59,7 +65,7 @@ function LoanCard(props) {
             type="text"
             className="form__input form__input--to"
             name="username"
-            onChange={updateUsername}
+            onChange={updateUserId}
           />
           <input
             type="number"

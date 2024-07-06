@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 function CloseCard(props) {
   const [formData, setFormData] = React.useState({
     username: "",
-    pin: "",
+    password: "",
   });
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setFormData({
@@ -21,29 +21,21 @@ function CloseCard(props) {
     e.preventDefault();
 
     try {
-      const closeAccountStatus = await axios.post(
-        "http://localhost:5001/api/endpoint/close",
-        { ...formData }
+      const response = await axios.delete(
+        "https://springbootbackend-production-4c75.up.railway.app/user",
+        {
+          data: { ...formData },
+        }
       );
-      if (closeAccountStatus.message === "Unauthorized") {
-        alert("Session timeout, please login/signup");
-        window.location.href = "/";
+
+      if (response.status === 200) {
+        navigate("/");
+      } else {
+        alert(response.data.message);
       }
-
-      // Handle the response from the server here
-      // const closeAccountData = closeAccountStatus.data;
-
-      // if (closeAccountData) {
-      // Assuming a successful response contains a "success" property
-      // console.log("Account closed successfully");
-      // Redirect to the login page after closing the account
-      Navigate("/Login2");
-      // } else {
-      // console.log("Account closure failed");
-      // }
     } catch (error) {
       // Handle any errors that occurred during the request
-      console.error(1234);
+      console.log(error);
     }
   };
 
@@ -62,7 +54,7 @@ function CloseCard(props) {
             type="password"
             maxlength="6"
             class="form__input form__input--pin"
-            name="pin"
+            name="password"
             onChange={handleInputChange}
           />
           <button class="form__btn form__btn--close">&rarr;</button>

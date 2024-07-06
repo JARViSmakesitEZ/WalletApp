@@ -16,9 +16,11 @@ function showMovements(data) {
       )}
       <div className="participant_bg">
         {data.type === "deposit" ? (
-          <div className="movements__participant">{data.senderID}</div>
+          <div className="movements__participant">USER ID: {data.senderId}</div>
         ) : (
-          <div className="movements__participant">{data.recieverID}</div>
+          <div className="movements__participant">
+            USER ID: {data.receiverId}
+          </div>
         )}
       </div>
       {/* <div className="movements__date">{data.senderID}</div> */}
@@ -36,7 +38,7 @@ function Movement(props) {
   const movements = useRecoilValue(movementState);
   return (
     <div className="movements homePage__animation">
-      <p className={movements.length > 0 ? "hide" : "no_transactions"}>
+      <p className={movements.length !== 0 ? "hide" : "no_transactions"}>
         No Transactions .
       </p>
       {movements.map((data) => showMovements(data))}

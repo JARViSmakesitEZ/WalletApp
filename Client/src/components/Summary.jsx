@@ -7,6 +7,9 @@ function Summary(props) {
   let outAmount = 0;
   let interest = 0;
   const data = useRecoilValue(movementState);
+  console.log("this is data");
+  console.log(data);
+
   for (let i = 0; i < data.length; i++) {
     if (data[i].type === "deposit") {
       inAmount += data[i].amount;

@@ -59,7 +59,7 @@ function Functionalities({
             <TestCredentialsCard
               setCardState={setCardState}
               setOperationState={setOperationState}
-              username={userData.username}
+              userData={userData}
             />
           );
         }}

@@ -12,15 +12,17 @@ function SignupContainer2(props) {
     e.preventDefault();
 
     try {
+      console.log(formData);
       const response = await fetch(
-        "http://localhost:5001/api/endpoint/signup",
+        // "http://localhost:5001/api/endpoint/signup",
+        "https://springbootbackend-production-4c75.up.railway.app/user/register",
         {
           method: "POST", // Assuming you are sending a POST request, adjust if necessary
           headers: {
             "Content-Type": "application/json", // Adjust the content type based on your needs
           },
           body: JSON.stringify({
-            formData,
+            ...formData,
           }),
         }
       );
@@ -32,7 +34,7 @@ function SignupContainer2(props) {
         <SignupOperationStatus
           setOperationState={setOperationState}
           success={responseJson.status}
-          msg={responseJson.msg}
+          msg={responseJson.message}
           btnText={responseJson.status ? "log in" : "close"}
         />
       );

@@ -22,7 +22,7 @@ function CloseCard(props) {
 
     try {
       const response = await axios.delete(
-        "https://springbootbackend-production-4c75.up.railway.app/user",
+        "https://springboot-backend-4.onrender.com/user",
         {
           data: { ...formData },
         }

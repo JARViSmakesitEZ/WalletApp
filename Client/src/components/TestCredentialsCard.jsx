@@ -19,7 +19,7 @@ function CredentialsCard(props) {
 
     try {
       const response = await fetch(
-        "https://springbootbackend-production-4c75.up.railway.app/user/" +
+        "https://springboot-backend-4.onrender.com/user/" +
           parseInt(id),
         {
           method: "PUT",
